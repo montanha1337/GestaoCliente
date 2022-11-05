@@ -31,7 +31,7 @@ namespace API.negocios
                 string message;
                 if (!string.IsNullOrEmpty(cpf))
                 {
-                    string sql = String.Format("EXECUTE PROCCLIENTES NULL,{0},{1},{2},{3},{4},'I'",this.nome, this.cpf, this.sexo, this.tipo, this.situacao);
+                    string sql = String.Format("EXECUTE PROCCLIENTES NULL,'{0}',{1},{2},{3},{4},'I'", this.nome, this.cpf, this.sexo, this.tipo, this.situacao);
                     bd.ExecutaConsulta(sql);
                     message = "Inserido com sucesso.";
                 }
@@ -107,36 +107,55 @@ namespace API.negocios
             }
         }
 
-        private bool ValidarCpf(string cpf)
+        internal bool ValidarCpf(string cpf)
         {
-            int Soma;
-            double Resto;
-            Soma = 0;
-            int i;
-
             if (cpf.Length != 11)
                 return false;
 
-            for (i = 0; i < 9; i++)
-                Soma = Soma + Int32.Parse(cpf.Substring(i - 1, i)) * (11 - i);
+            bool igual = true;
 
-            Resto = (Soma * 10) % 11;
+            for (int i = 1; i < 11 && igual; i++)
+                if (cpf[i] != cpf[0])
+                    igual = false;
 
-            if ((Resto == 10) || (Resto == 11))
-                Resto = 0;
-            if (Resto != Int32.Parse(cpf.Substring(9, 10)))
+            if (igual || cpf == "12345678909")
                 return false;
 
-            Soma = 0;
+            int[] numeros = new int[11];
 
-            for (i = 1; i <= 10; i++)
-                Soma = Soma + Int32.Parse(cpf.Substring(i - 1, i)) * (12 - i);
 
-            Resto = (Soma * 10) % 11;
+            for (int i = 0; i < 11; i++)
+                numeros[i] = int.Parse(cpf[i].ToString());
 
-            if ((Resto == 10) || (Resto == 11))
-                Resto = 0;
-            if (Resto != Int32.Parse(cpf.Substring(10, 11)))
+            int soma = 0;
+
+            for (int i = 0; i < 9; i++)
+                soma += (10 - i) * numeros[i];
+
+            int resultado = soma % 11;
+
+            if (resultado == 1 || resultado == 0)
+            {
+                if (numeros[9] != 0)
+                    return false;
+
+            }
+            else if (numeros[9] != 11 - resultado)
+                return false;
+
+            soma = 0;
+
+            for (int i = 0; i < 10; i++)
+                soma += (11 - i) * numeros[i];
+
+            resultado = soma % 11;
+
+            if (resultado == 1 || resultado == 0)
+            {
+                if (numeros[10] != 0)
+                    return false;
+            }
+            else if (numeros[10] != 11 - resultado)
                 return false;
 
             return true;
