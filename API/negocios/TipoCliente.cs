@@ -36,7 +36,7 @@ namespace API.negocios
                 this.id = id;
                 this.tipo = tipo;
                 ValidarDados();
-                string sql = String.Format("EXECUTE PROCTIPO {0},{1},'A'", this.id, this.tipo);
+                string sql = String.Format("EXECUTE PROCTIPO {0},'{1}','A'", this.id, this.tipo);
                 bd.ExecutaConsulta(sql);
                 return Results.Accepted("Alterado com sucesso");
             }
@@ -50,7 +50,7 @@ namespace API.negocios
         {
             try
             {
-                 object id1 = id;
+                this.id = id;
                 ValidarDados();
 
                 string sql = String.Format("EXECUTE PROCTIPO {0},NULL,'E'", this.id);
@@ -63,12 +63,10 @@ namespace API.negocios
             }
         }
 
-        public string Listar(string id, string tipo)
+        public string Listar()
         {
             try
             {
-                this.id = id;
-                this.tipo = tipo;
                 ValidarDados();
 
                 string sql = String.Format("EXECUTE PROCTIPO {0},{1},'L'", this.id, this.tipo);
@@ -84,7 +82,7 @@ namespace API.negocios
         private void ValidarDados()
         {
             id = string.IsNullOrEmpty(id) ? "NULL" : id;
-            tipo = string.IsNullOrEmpty(tipo) ? "NULL" : tipo;
+            tipo = string.IsNullOrEmpty(tipo) ? "NULL" : "'"+tipo+"'";
         }
         #endregion
     }

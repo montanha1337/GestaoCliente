@@ -1,0 +1,35 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #B8F0F0;
+    color: black;
+}
+
+.TextEdit{
+    width:600px;
+    justify-content:center;
+}
+
+.menu {
+    opacity: 70%;
+}
+
+.imglogo{
+    width:30px;
+    height:30px;
+
+}

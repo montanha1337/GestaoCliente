@@ -1,0 +1,82 @@
+﻿@page
+@using GestaoClienteWeb.Repo
+@model ConfigModel
+@{
+    ViewData["Title"] = "Configuração Sistema";
+}
+
+<div class="text-center">
+    <div class="jumbotron">
+        <h1 class="display-4">@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm">
+        <form class="TextEdit" id="form1" method="Post">
+            <div class="form-group-sm">
+                <label for="idSituacao">Código</label>
+                <input name="idSituacao" class="form-control" type="text" id="idSituacao" placeholder="1" value="">
+            </div>
+            <div class="form-group-sm">
+                <label for="situacao">Situação Cliente</label>
+                <input name="situacao" class="form-control" type="text" id="situacao" placeholder="Ativo" value="">
+            </div>
+            <br />
+            <button type="submit" class="btn btn-warning" asp-action="CadastrarSituacao">Cadastrar</button>
+            <button type="submit" class="btn btn-warning" asp-action="alterarSituacao">Alterar</button>
+            <button type="submit" class="btn btn-warning" asp-action="ExcluirSituacao">Excluir</button>
+        </form>
+        <br/>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Situação Cliente</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Situacao situacao in ConfigModel.situacaobd)
+                {
+                    <tr>
+                        <td>@situacao.id</td>
+                        <td>@situacao.situacaoCliente</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm">
+        <form class="TextEdit" id="form2" method="Post">
+            <div class="form-group-sm">
+                <label for="idTipo">Código</label>
+                <input name="idTipo" class="form-control" type="text" id="idTipo" placeholder="1" value="">
+            </div>
+            <div class="form-group-sm">
+                <label for="tipo">Tipo Cliente</label>
+                <input name="tipo" class="form-control" type="text" id="tipo" placeholder="Cliente" value="">
+            </div>
+            <br />
+            <button type="submit" class="btn btn-warning" asp-action="CadastrarTipo" OnClientClick="window.location.reload();">Cadastrar</button>
+            <button type="submit" class="btn btn-warning" asp-action="AlterarTipo">Alterar</button>
+            <button type="submit" class="btn btn-warning" asp-action="ExcluirTipo"OnClientClick="window.location.reload();">Excluir</button>
+        </form>
+        <br/>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Tipo Cliente</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Tipo tipo in ConfigModel.tipobd)
+                {
+                    <tr>
+                        <td>@tipo.id</td>
+                        <td>@tipo.tipoCliente</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>

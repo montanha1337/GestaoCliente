@@ -24,6 +24,12 @@ app.MapPost("/cliente/Listar", (dbCliente cliente) =>
     return clienteForm.Listar(cliente.id, cliente.nome, cliente.cpf, cliente.sexo, cliente.tipo, cliente.situacao);
 }).WithTags("Cliente");
 
+app.MapGet("/cliente/Listar", () =>
+{
+    Cliente clienteForm = new Cliente();
+    return clienteForm.Listar();
+}).WithTags("Cliente");
+
 app.MapDelete("/cliente/{id}", (string id) =>
 {
     Cliente clienteForm = new Cliente();
@@ -44,10 +50,10 @@ app.MapPost("/cliente", (dbCliente cliente) =>
 #endregion
 
 #region TIPO CLIENTE
-app.MapPost("/tipo/listar", (dbTipo tipo) =>
+app.MapGet("/tipo/listar", () =>
 {
     TipoCliente tipoCliente = new TipoCliente();
-    return tipoCliente.Listar(tipo.id, tipo.tipo);
+    return tipoCliente.Listar();
 }).WithTags("Tipo Cliente");
 
 app.MapDelete("/tipo/{id}", (string id) =>
@@ -62,7 +68,7 @@ app.MapPut("/tipo/{id}", (string id, dbTipo tipo) =>
     return tipoCliente.Alterar(id, tipo.tipo);
 }).WithTags("Tipo Cliente");
 
-app.MapPost("/tipo/inserir", (dbTipo tipo) =>
+app.MapPost("/tipo", (dbTipo tipo) =>
 {
     TipoCliente tipoCliente = new TipoCliente();
     return tipoCliente.Inserir(tipo.tipo);
