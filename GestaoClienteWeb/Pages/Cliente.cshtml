@@ -1,0 +1,87 @@
+﻿@page
+@using GestaoClienteWeb.Repo
+@model GestaoClienteWeb.Pages.ClienteModel;
+@{
+    ViewData["Title"] = "Cliente";
+}
+
+<div class="text-center">
+    <div class="jumbotron">
+        <h1 class="display-4">@ViewData["Title"]</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm">
+        <form class="TextEdit" id="form1" method="dialog">
+            <div class="form-group-sm">
+                <label for="id">Código</label>
+                <input name="id" class="form-control" type="text" id="id" placeholder="1" value=""> 
+            </div>
+            <div class="form-group-sm">
+                <label for="nome">Nome</label>
+                <input name="nome" class="form-control" type="text" id="nome" placeholder="Joaquim Alves" value="">
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF</label>
+                <input name="cpf" class="form-control" id="cpf" placeholder="000.000.000-00" value="">
+            </div>
+            <div class="form-group">
+                <label for="sexo">Sexo</label>
+                <select name="Sexo" class="form-control" id="sexo">
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="situacao">Situação Cliente</label>
+                <select name="situacao" class="form-control" id="situacao">
+                    @foreach (Situacao situacao in ClienteModel.situacaobd)
+                    {
+                        <option value="@situacao.id">@situacao.situacaoCliente</option>
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo Cliente</label>
+                <select name="tipo" class="form-control" id="tipo">
+                    @foreach (Tipo tipo in ClienteModel.tipobd)
+                    {
+                        <option value="@tipo.id">@tipo.tipoCliente</option>
+                    }
+                </select>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-warning" asp-action="Cadastrar">Cadastrar</button>
+            <button type="submit" class="btn btn-warning" asp-action="Alterar">Alterar</button>
+            <button type="submit" class="btn btn-warning" asp-action="Excluir">Excluir</button>
+        </form>
+    </div>
+    <div class="col-sm">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">CPF</th>
+                    <th scope="col">Sexo</th>
+                    <th scope="col">Situação</th>
+                    <th scope="col">Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Cliente cliente in ClienteModel.clientebd)
+                {          
+                    <tr>   
+                    <td>@cliente.Id</td>
+                    <td>@cliente.nome</td>
+                    <td>@ClienteModel.FormataCpf(cliente.cpf)</td>
+                    <td>@cliente.sexo</td>
+                    <td>@cliente.situacaoCliente</td>
+                    <td>@cliente.tipoCliente</td>   
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

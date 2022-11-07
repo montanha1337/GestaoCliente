@@ -41,42 +41,48 @@ namespace API.DBObjects
         #region PROCEDURES DO BANCO
         public string ProcCliente()
         {
-            return @"CREATE OR ALTER PROCEDURE PROCCLIENTES
-						@id int,
-						@nome NVARCHAR(100),
-						@cpf NVARCHAR(11),
-						@sexo NVARCHAR(1),
-						@TipoCliente int,
-						@situacaoCliente int,
-						@utilizacao NVARCHAR(1) AS
-					BEGIN
+			return @"CREATE OR ALTER PROCEDURE [dbo].[PROCCLIENTES]
+							@id int,
+							@nome NVARCHAR(100),
+							@cpf NVARCHAR(11),
+							@sexo NVARCHAR(1),
+							@TipoCliente int,
+							@situacaoCliente int,
+							@utilizacao NVARCHAR(1) AS
+						BEGIN
 
-						IF @utilizacao = 'L'
+							IF @utilizacao = 'L'
 	
-							SELECT * FROM [dbo].[Cliente]
-							WHERE [nome] LIKE '%' + ISNULL(@nome,[nome]) + '%'
-								AND [cpf] LIKE '%' + ISNULL(@cpf,[cpf]) + '%'
-								AND [sexo] = ISNULL(@sexo,[sexo])
-								AND [tipoCliente] = ISNULL(@TipoCliente,[tipoCliente])
-								AND [situacaoCliente] = ISNULL(@situacaoCliente,[situacaoCliente])
-								AND [Id] = ISNULL(@id,[Id])
+								SELECT T0.[Id]
+									 , T0.[nome]
+									 , REPLICATE('0', 11 - LEN(T0.[cpf])) + RTrim(T0.[cpf]) AS ""cpf""
+									 , CASE WHEN T0.[sexo] = 'M' THEN 'Masculino' ELSE 'Feminino' END AS ""sexo""
+									 , T1.situacaoCliente
+									 , T2.TipoCliente
+								FROM [dbo].[Cliente] AS T0
+								LEFT JOIN [dbo].[SituacaoCliente] AS T1 ON T0.[situacaoCliente] = T1.Id
+								LEFT JOIN [dbo].[TipoCliente] AS T2 ON T0.tipoCliente = T2.Id
+								WHERE T0.[nome] LIKE '%' + ISNULL(@nome,T0.[nome]) + '%'
+									AND T0.[cpf] LIKE '%' + ISNULL(@cpf,T0.[cpf]) + '%'
+									AND T0.[sexo] = ISNULL(@sexo,T0.[sexo])
+									AND T0.[Id] = ISNULL(@id,T0.[Id])
 
-						IF @utilizacao = 'I' AND ISNULL(@id,0) = 0
-							INSERT INTO [dbo].[Cliente] ([nome],[cpf],[sexo],[tipoCliente],[situacaoCliente]) VALUES (@nome,@cpf,@sexo,@TipoCliente,@situacaoCliente)
+							IF @utilizacao = 'I' AND ISNULL(@id,0) = 0
+								INSERT INTO [dbo].[Cliente] ([nome],[cpf],[sexo],[tipoCliente],[situacaoCliente]) VALUES (@nome,@cpf,@sexo,@TipoCliente,@situacaoCliente)
 
-						IF @utilizacao = 'A' AND ISNULL(@id,0) > 0
-							UPDATE [dbo].[Cliente]
-							   SET [nome] = ISNULL(@nome,[nome])
-								  ,[cpf] = ISNULL(@cpf,[cpf])
-								  ,[sexo] = ISNULL(@sexo,[sexo])
-								  ,[tipoCliente] = ISNULL(@TipoCliente,[tipoCliente])
-								  ,[situacaoCliente] = ISNULL(@situacaoCliente,[situacaoCliente])
-							 WHERE [Id] = @id
+							IF @utilizacao = 'U' AND ISNULL(@id,0) > 0
+								UPDATE [dbo].[Cliente]
+								   SET [nome] = ISNULL(@nome,[nome])
+									  ,[cpf] = ISNULL(@cpf,[cpf])
+									  ,[sexo] = ISNULL(@sexo,[sexo])
+									  ,[tipoCliente] = ISNULL(@TipoCliente,[tipoCliente])
+									  ,[situacaoCliente] = ISNULL(@situacaoCliente,[situacaoCliente])
+								 WHERE [id] = @id
 
-						IF @utilizacao = 'E' AND ISNULL(@id,0) > 0
-							DELETE FROM [dbo].[Cliente]
-							WHERE [Id] = @id
-					END";
+							IF @utilizacao = 'D' AND ISNULL(@id,0) > 0
+								DELETE FROM [dbo].[Cliente]
+								WHERE [id] = @id
+						END;";
         }
 
         public string ProcSituacaoCliente()

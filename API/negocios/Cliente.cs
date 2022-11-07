@@ -107,6 +107,22 @@ namespace API.negocios
             }
         }
 
+        public string Listar()
+        {
+            try
+            {
+                ValidarDados();
+
+                string sql = String.Format("EXECUTE PROCCLIENTES {0},{1},{2},{3},{4},{5},'L'", this.id, this.nome, this.cpf, this.sexo, this.tipo, this.situacao);
+                DataTable dt = bd.GetDadosDataTable(sql);
+                return bd.ConverterDataTableJson(dt);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
         internal bool ValidarCpf(string cpf)
         {
             if (cpf.Length != 11)
